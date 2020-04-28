@@ -26,3 +26,32 @@ from inventory;
 select actor_id, first_name, last_name, last_update
 from actor;
 ```
+
+#### 3.5 Write a query to obtain the length of each customer's first name (*remember to look for string functions in the documentation that can help*)
+
+```sql
+select first_name, length(first_name)
+from customer;
+```
+
+#### 3.6 Write a query to return the initials for each customer
+
+```sql
+select
+  first_name,
+  last_name,
+  left(first_name, 1) || left(last_name, 1) as "initial"
+from customer;
+```
+
+#### 3.7 Each film has a rental_rate, which is how much money it costs for a customer to rent out the film. Each film also has a replacement_cost, which is how much money the film costs to replace. Write a query to figure out how many times each film must be rented out to cover its replacement cost.
+
+```sql
+select
+  title,
+  rental_rate,
+  replacement_cost,
+  ceil(replacement_cost / rental_rate) as "# rentals to break-even"
+from film;
+```
+
