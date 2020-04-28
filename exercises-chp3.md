@@ -170,7 +170,7 @@ from film
 where title like '%GRAFFITI';
 ```
 
-### 3.21 In exercise 3.17 you wrote a query to list the films that have a rating that is not 'G' or 'PG'. Re-write this query using NOT IN. Do your results include films with a NULL rating?
+#### 3.21 In exercise 3.17 you wrote a query to list the films that have a rating that is not 'G' or 'PG'. Re-write this query using NOT IN. Do your results include films with a NULL rating?
 
 ```sql
 select title, rating
