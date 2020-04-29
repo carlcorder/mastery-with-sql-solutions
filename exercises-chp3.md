@@ -208,3 +208,12 @@ order by len desc;
 #### 3.25 Describe the difference between ORDER BY x, y DESC and ORDER BY x DESC, y DESC (where x and y are columns in some imaginary table you're querying)
 
 ORDER BY x, y DESC is equivalent to ORDER BY x ASC, y DESC - order first by x ascending, then by y descending. This is different from ORDER BY x DESC, y DESC - order by x descending, then by y descending. When asc/desc is omitted, ascending is the default. 
+
+#### 3.26 Fix the query below, which we wanted to use to list all the rentals that happened after 10pm at night.
+
+```sql
+select rental_id, date_part('hour', rental_date) as "rental hour"
+from rental
+where date_part('hour', rental_date) >= 22;
+```
+
