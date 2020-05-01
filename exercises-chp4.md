@@ -1,3 +1,6 @@
+## Exercises Chp 4
+
+
 #### 4.1 Write a query to return the total count of customers in the customer table and the count of how many customers provided an email address
 
 ```sql
