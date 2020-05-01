@@ -1,4 +1,6 @@
 ## Exercises Chp 3
+
+
 #### 3.1 Write a query to list all the film titles
  
 ```sql
