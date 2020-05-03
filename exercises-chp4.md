@@ -131,8 +131,14 @@ order by avg_rent_duration desc;
 #### 4.13 Return a list of customer where all payments they’ve made have been over $2 (lookup the bool_and aggregate function which will be useful here)
 
 ```sql
-This was a tricky one. The key here was to realize bool_and is just like the other aggregate functions you've already seen in that it combines multiple rows in to a single output, but unlike all the other aggregate functions you've seen bool_and does this by performing a logical AND between each input expression. 
+select customer_id
+from payment
+group by customer_id
+having bool_and(amount > 2);
 ```
+
+This was a tricky one. The key here was to realize bool_and is just like the other aggregate functions you've already seen in that it combines multiple rows in to a single output, but unlike all the other aggregate functions you've seen bool_and does this by performing a logical AND between each input expression. 
+
 
 #### 4.14 As a final fun finish to this chapter, run the following query to see a cool way you can generate ascii histogram charts. Look up the repeat function (you'll find it under 'String Functions and Operators') to see how it works and change the output character...and don't worry, I'll explain the ::int bit in the next chapter!
 
