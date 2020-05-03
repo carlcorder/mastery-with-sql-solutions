@@ -106,8 +106,56 @@ group by 1
 order by 1;
 ```
 
+#### 4.11 Explain why in the following query we obtain two different results for the average film length. Which one is correct?
+
+```sql
+select
+  1.0 * sum(length) / count(*) as avg1,
+  1.0 * avg(length) as avg2
+from film;
+```
+
+When using the avg aggregate function, NULL lengths are ignored in the calculation. However, the count(*) term in the first selected column will count all the rows, even those with a NULL length. Technically either approach could be correct, depending on how you want to treat NULL length films. Most people would probably argue though that here, the second approach is correct. 
+
+#### 4.12 Write a query to return the average rental duration for each customer in descending order
+
+```sql
+select
+  customer_id,
+  avg(return_date - rental_date) as avg_rent_duration
+from rental
+group by customer_id
+order by avg_rent_duration desc;
+```
+
+#### 4.13 Return a list of customer where all payments they’ve made have been over $2 (lookup the bool_and aggregate function which will be useful here)
+
+```sql
+This was a tricky one. The key here was to realize bool_and is just like the other aggregate functions you've already seen in that it combines multiple rows in to a single output, but unlike all the other aggregate functions you've seen bool_and does this by performing a logical AND between each input expression. 
+```
+
+#### 4.14 As a final fun finish to this chapter, run the following query to see a cool way you can generate ascii histogram charts. Look up the repeat function (you'll find it under 'String Functions and Operators') to see how it works and change the output character...and don't worry, I'll explain the ::int bit in the next chapter!
+
+```sql
+select rating, repeat('*', (count(*) / 10)::int) as "count/10"
+from film
+where rating is not null
+group by rating;
+```
+
+rating|count/10              |
+------|----------------------|
+PG-13 |**********************|
+R     |*******************   |
+G     |*****************     |
+PG    |*******************   |
+NC-17 |********************  |
+
+The repeat function is used to repeat the '*' character count/10 times for each group (I divided by 10 just to keep the output concise!)
+
 #### 
 
 ```sql
 
 ```
+
