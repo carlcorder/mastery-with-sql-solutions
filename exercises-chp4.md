@@ -158,10 +158,3 @@ PG    |*******************   |
 NC-17 |********************  |
 
 The repeat function is used to repeat the '*' character count/10 times for each group (I divided by 10 just to keep the output concise!)
-
-#### 
-
-```sql
-
-```
-
