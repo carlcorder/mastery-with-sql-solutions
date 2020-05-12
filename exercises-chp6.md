@@ -99,10 +99,20 @@ group by f.film_id, f.title
 order by count(i.inventory_id) asc;
 ```
 
-#### 
+#### 6.8 Write a query to return a count of the number of films rented by every customer on the 24th May, 2005. Order the results by number of films rented descending.
+
+A key issue you may have run across when solving this exercise is if you tried to perform the date check in the WHERE clause instead of making it one of the join conditions. The problem with making it part of the WHERE clause is it would act to filter the output of the left join, removing any rows that the left join added back in. This is because rows added back in by the left join - customers with no rentals - will have a NULL rental date. If you put the date check in the WHERE clause, you would effectively be making your left join an inner join! 
 
 ```sql
-
+select
+  c.customer_id,
+  count(r.rental_id) as num_rented
+from customer as c
+  left join rental as r
+    on c.customer_id = r.customer_id
+    and date_trunc('day', r.rental_date) = '20050524'
+group by c.customer_id
+order by num_rented desc, c.customer_id;
 ```
 
 #### 
