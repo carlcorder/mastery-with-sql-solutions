@@ -72,19 +72,31 @@ from film
 select film.title, language.name as "language"
 from film
   inner join language using (language_id);
-
 ```
 
-#### 
+#### 6.6 Write a query to list the films that are not in stock in any of the stores
+
+After performing a left outer join with the film and inventory tables, the only rows in the output with a NULL store ID will be those that didn't have any matching records in both tables - that is, those films not in our inventory. So we can simply filter the output for where the store ID is NULL. 
 
 ```sql
-
+select f.title
+from film as f
+  left outer join inventory as i
+    on f.film_id = i.film_id
+where i.store_id is null;
 ```
 
-#### 
+#### 6.7 Write a query to return a count of how many of each film we have in our inventory (include all films). Order the output showing the lowest in-stock first so we know to buy more!
+
+After joining the film and inventory tables we can then group by the film ID and perform a count of the number of rows, making sure that we're only counting, for each group, the rows where the inventory ID is not NULL (to ensure missing films added by the outer join still end up with a count of 0, not 1) 
 
 ```sql
-
+select f.title, count(i.inventory_id)
+from film as f
+  left outer join inventory as i
+    on f.film_id = i.film_id
+group by f.film_id, f.title
+order by count(i.inventory_id) asc;
 ```
 
 #### 
