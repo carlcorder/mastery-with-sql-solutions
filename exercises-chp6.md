@@ -130,20 +130,33 @@ group by f.film_id, s.store_id
 order by stock, f.film_id, s.store_id;
 ```
 
-#### 
+#### 6.10 Have a look at the documentation for the extremely useful Postgres function generate_series and then using [generate_series](https://www.postgresql.org/docs/current/functions-srf.html) write a query to return a count of the number of rentals for each and every month in 2005 (don't worry too much about the output date formatting).
+
+Here we use generate_series to return a table consisting of 12 rows, with each row containing a timestamp representing the first day of each month in 2005. The table has the alias m, and a single column t (you're free to name your table and column whatever you want). On to this we left join the rental table, truncating the rental date to the month which allows us to perform an equality join (a timestamp truncated to the month will have it's day part set to 01, and time part set to 00:00:00 - consistent with the output from generate_series). The syntax here might have thrown you off, but the underlying idea is the same as what you've done now in quite a few past exercises! 
 
 ```sql
-
+select
+  m.t,
+  count(r.rental_id)
+from generate_series('2005-01-01'::timestamp, '2005-12-01'::timestamp, '1 month') as m(t)
+  left join rental as r
+    on date_trunc('month', r.rental_date) = m.t
+group by m.t;
 ```
 
-#### 
+#### 6.11 Write a query to list the customers who rented out the film with ID 97 and then at some later date rented out the film with ID 841
+
+This was a hard one - give yourself a big pat on the back if figured it out! This query involved a self-join on the rental table with the additional complexity that for each rental self-join, the inventory table was necessary as well to resolve the actual films being rented in each case! 
 
 ```sql
-
-```
-
-#### 
-
-```sql
-
+select r.customer_id
+from rental as r
+  inner join inventory as i
+    on r.inventory_id = i.inventory_id
+  inner join rental as r2
+    on r.customer_id = r2.customer_id
+    and r2.rental_date > r.rental_date
+  inner join inventory as i2
+    on r2.inventory_id = i2.inventory_id
+where i.film_id = 97 and i2.film_id = 841;
 ```
