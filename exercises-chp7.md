@@ -23,7 +23,9 @@ from film
 where film_id not in
   (select film_id
    from film_actor);
-   
+```
+
+```sql
 select film_id, title
 from film as f
   left join film_actor as fa using (film_id)
