@@ -1,3 +1,5 @@
+# Exercises Chp 7
+
 #### 
 
 ```sql
