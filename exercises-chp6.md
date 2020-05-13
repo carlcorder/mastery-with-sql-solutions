@@ -115,10 +115,19 @@ group by c.customer_id
 order by num_rented desc, c.customer_id;
 ```
 
-#### 
+#### 6.9 Write a query to return how many copies of each film are available in each store, including zero counts if there are none. Order by count so we can easily see first which films need to be restocked in each store
+
+To obtain a complete list of every film and store combination, you first need to perform a cross join between the film and store tables. Only then can you left join the inventory table on to that - making sure you perform a composite join to match both the film ID and store ID. 
 
 ```sql
-
+select f.film_id, s.store_id, count(i.inventory_id) as stock
+from film as f
+  cross join store as s
+  left join inventory as i
+    on f.film_id = i.film_id
+    and s.store_id = i.store_id
+group by f.film_id, s.store_id
+order by stock, f.film_id, s.store_id;
 ```
 
 #### 
