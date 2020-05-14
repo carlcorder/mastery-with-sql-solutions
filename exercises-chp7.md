@@ -50,6 +50,56 @@ where i1.film_id =
    limit 1);
 ```
 
+#### 7.4 Write a query to return the countries in our database that have more than 15 cities
+
+For this exercise we use a subquery to obtain, for each country, a count of the number of cities listed for that country. This can then be used in the WHERE clause to filter the countries in our final output. 
+
+```sql
+select country.country
+from country
+where
+  (select count(*)
+   from city
+   where city.country_id = country.country_id) > 15;
+```
+
+#### 7.5 Write a query to return for each customer the store they most commonly rent from
+
+The correlated subquery in this case is used to obtain, for each customer, the store that the customer visits the most. How do we work that out? By tallying up all the rentals from that customer by store ID, ordering by the count (descending! If you forget to add 'desc' you'll return the least popular store for each customer!) and then taking the first result with LIMIT. 
+
+```sql
+select
+  c.customer_id,
+  c.first_name,
+  c.last_name,
+  (select i.store_id
+   from rental as r
+     inner join inventory as i using (inventory_id)
+   where r.customer_id = c.customer_id
+   group by i.store_id
+   order by count(*) desc
+   limit 1) as "Favourite Store"
+from customer as c;
+```
+
+#### 7.6 In the customer table, each customer has a store ID which is the store they originally registered at. Write a query to list for each customer whether they have ever rented from a different store than that one they registered at. Return 'Y' if they have, and 'N' if they haven't.
+
+This was a tricky one due to the combination of using a case expression and EXISTS. If you got it right, well done! The subquery here is used to return for each customer any rentals they made from a store different from the store they registered at. If any exist, then the case expression is used to output 'Y', otherwise 'N'. 
+
+```sql
+select c.first_name, c.last_name,
+  case
+    when exists 
+      (select *
+       from rental as r
+         inner join inventory as i using (inventory_id)
+       where r.customer_id = c.customer_id
+         and i.store_id != c.store_id) then 'Y'
+    else 'N'
+  end as "HasRentedOtherStore"
+from customer as c;
+```
+
 #### 
 
 ```sql
