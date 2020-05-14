@@ -100,16 +100,31 @@ select c.first_name, c.last_name,
 from customer as c;
 ```
 
-#### 
+#### 7.7 Write a query to return each customer 4 times
+
+Cross joining the customer table on to any table containing only four rows will do the job - to guarantee that we have exactly four rows we specify a values list and create a new virtual table to join on to. 
 
 ```sql
-
+select c.first_name, c.last_name
+from customer as c
+  cross join (values (1), (2), (3), (4)) as v(n)
+order by c.customer_id;
 ```
 
-#### 
+#### 7.8 Write a query to return how many rentals the business gets on average on each day of the week. Order the results to show the days of the week with the highest average number of rentals first (use the round function to round the average so it's a nice whole number). Have a look at the [to_char](https://www.postgresql.org/docs/current/functions-formatting.html) function to obtain the day name given a timestamp. For simplicity, don't worry about days in which there were no rentals.
+
+This was a tricky one and there's a couple of different ways you could have solved it. In the solution below, the table subquery aggregates the ratings for each date from the rental table. The outer query then further aggregates by the actual day of the week for each date and performs an average for each day of the week (the to_char function is used to obtain the day name).
 
 ```sql
-
+select
+  to_char(rent_day, 'Day') as day_name,
+  round(avg(num_rentals)) as average
+from
+  (select date_trunc('day', rental_date) as rent_day, count(*) as num_rentals
+   from rental
+   group by rent_day) as T
+group by day_name
+order by average desc;
 ```
 
 #### 
