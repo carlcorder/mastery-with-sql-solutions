@@ -146,6 +146,55 @@ from customer as c
     on c.customer_id = d.customer_id;
 ```
 
+#### 7.10 Write a query to list the customers who rented out the film with title "BRIDE INTRIGUE" and then at some later date rented out the film with title "STAR OPERATION". Use a CTE to simplify your code if possible.
+
+In case this exercise feels familiar, it is! You earlier did a version of this exercise when learning about joins but were instead referencing the same films by their IDs (97 and 841 respectively). The solution involves self-joins and here the use of a CTE simplifies things substantially by allowing us to define a table called rental_detail that performs all the joins and then joining that table on to itself as part of the actual query. The join condition specifies that we only keep rows where the customer IDs match, the film titles match what we're after, and the rental date of the first film is before the second film. 
+
+```sql
+with rental_detail as
+(
+  select r.customer_id, r.rental_date, f.title
+  from rental as r
+    inner join inventory as i using (inventory_id)
+    inner join film as f using (film_id)
+)
+select r1.customer_id
+from rental_detail as r1
+  inner join rental_detail as r2
+    on r1.customer_id = r2.customer_id
+    and r2.rental_date > r1.rental_date
+    and r1.title = 'BRIDE INTRIGUE' and r2.title = 'STAR OPERATION';
+```
+
+#### 7.11 Write a query to calculate the amount of income received each month and compare that against the previous month's income, showing the change.
+
+A tough one - give yourself a pat on the back if you got this right. The CTE in this case is used to establish a baseline table holding the amount of money received in each month. By then performing a left self-join and establishing just the right join conditions (probably the trickiest part) you're able to join up every month with the previous month to calculate the change in income. 
+
+```sql
+with monthly_amounts as
+(
+  select
+    date_trunc('month', payment_date) as month,
+    sum(amount) as total
+  from payment
+  group by month
+)
+select
+  curr.month,
+  curr.total as "income",
+  prev.total as "prev month income",
+  curr.total - prev.total as "change"
+from monthly_amounts as curr
+  left join monthly_amounts as prev
+    on curr.month = prev.month + interval '1 month'
+```
+
+#### 
+
+```sql
+
+```
+
 #### 
 
 ```sql
