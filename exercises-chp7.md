@@ -203,6 +203,24 @@ where date_part('year', rental_date) = 2005
      where date_part('year', rental_date) = 2006);
 ```
 
+#### 7.13 What are the top 3 countries the customers are from. Show both the number of customers from each country and percentage (round the percentage to the nearest whole number)
+
+This is a fairly standard exercise involving grouping and joins which at this point you're very familiar with. The one addition though is the requirement to calculate a percentage for each country - to work out what percentage of customers come from each country. To do this, you'll need to use a subquery to obtain the count of the total number of customers to use in the calculation. In the solution I have also rounded the percentage so it's a nice whole number. 
+
+```sql
+select
+  country,
+  count(*) as num_customers,
+  round(100.0 * count(*) / (select count(*) from customer)) as percent
+from customer as c
+  inner join address using (address_id)
+  inner join city using (city_id)
+  inner join country using (country_id)
+group by country
+order by count(*) desc
+limit 3;
+```
+
 #### 
 
 ```sql
