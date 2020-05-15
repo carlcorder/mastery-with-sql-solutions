@@ -221,20 +221,54 @@ order by count(*) desc
 limit 3;
 ```
 
-#### 
+#### 7.14 Write a query to perform a running total of payments received, grouping by month (ie. for each month return the amount of money received that month and also the total amount of money received up to (and including) that month - this is a useful view to have if you wanted to produce a cumulative chart). Hint - Re-use the monthly_amounts CTE from exercise 7.11
+
+This exercise becomes a lot easier once we leverage the monthly_amounts CTE we worked on earlier. To obtain the cumulative amount for each month then, you can use a correlated subquery to calculate the sum of all the amounts from the same table up to and including the current month) 
 
 ```sql
-
+with monthly_amounts as
+(
+  select
+    date_trunc('month', payment_date) as month,
+    sum(amount) as amount
+  from payment
+  group by month
+)
+select ma1.month, ma1.amount,
+  (select sum(ma2.amount)
+   from monthly_amounts as ma2
+   where ma2.month <= ma1.month) as cumamount
+from monthly_amounts as ma1
+order by ma1.month;
 ```
 
-#### 
+#### 7.15 The rental table has 16,044 rows but the maximum rental ID is 16,049. This suggests that some rental IDs have been skipped over. Write a query to find the missing rental IDs. The [generate_series](https://www.postgresql.org/docs/current/functions-srf.html) function may come in handy
+
+This was a particularly tricky one! generate_series is used to obtain the full list of IDs from the min to the max and then via a correlated subquery, we only keep those that don't exist in the rental table. 
 
 ```sql
-
+select s.id
+from generate_series(
+  (select min(rental_id) from rental),
+  (select max(rental_id) from rental)) as s(id)
+where not exists
+  (select *
+   from rental as r
+   where r.rental_id = s.id);
 ```
 
-#### 
+#### 7.16 In an earlier exercise I asked you to see if you could find a way to return the last 3 payments made in Jan, 2007 but ordered ascending. You've got the tools now to accomplish this - see if you can figure it out!
+
+The key insight to accomplish this is to realize you can find and select the 3 rows you're after using a table subquery. Within that subquery you're able to order the payments in descending order to be able to pick the last 3, but then outside of that subquery you're once again free to specify a new ordering for display purposes! 
 
 ```sql
-
+select payment_id, amount, payment_date
+from 
+  (select payment_id, amount, payment_date
+   from payment
+   where payment_date >= '2007-01-01'
+     and payment_date < '2007-02-01'
+   order by payment_date desc
+   limit 3) as p
+order by payment_date asc;
 ```
