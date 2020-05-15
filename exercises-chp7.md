@@ -189,10 +189,18 @@ from monthly_amounts as curr
     on curr.month = prev.month + interval '1 month'
 ```
 
-#### 
+#### 7.12 Write a query to return the customers who rented a film in 2005 but none in 2006
+
+The solution below queries the rental table for all customers who did rent a film in 2005 and then further filters the list by removing customers who then rented a film in 2006. 
 
 ```sql
-
+select distinct customer_id
+from rental
+where date_part('year', rental_date) = 2005
+  and customer_id not in
+    (select customer_id
+     from rental
+     where date_part('year', rental_date) = 2006);
 ```
 
 #### 
