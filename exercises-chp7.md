@@ -127,10 +127,23 @@ group by day_name
 order by average desc;
 ```
 
-#### 
+#### 7.9 Write a query to return for each customer the first 'PG' film that they rented (include customers who have never rented a 'PG' film as well)
+
+We make use of a left join lateral here to join on to a table subquery that will return for each customer the first film they rented that was PG. By using a left join, any customers who have not rented any PG films will be in the output with a NULL title and rental_date. There are 6 such customers. 
 
 ```sql
-
+select c.first_name, c.last_name, d.title, d.rental_date
+from customer as c
+  left join lateral
+    (select r.customer_id, f.title, r.rental_date
+     from rental as r
+       inner join inventory as i using (inventory_id)
+       inner join film as f using (film_id)
+     where r.customer_id = c.customer_id
+       and f.rating = 'PG'
+     order by r.rental_date
+     limit 1) as d
+    on c.customer_id = d.customer_id;
 ```
 
 #### 
