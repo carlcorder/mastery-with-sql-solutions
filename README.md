@@ -32,3 +32,7 @@
   * Table Subqueries
   * Lateral Subqueries
   * Common Table Expressions
+* Chp 8: [Window Functions](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp8.md)
+  * Ranking Window Functions
+  * Aggregate Window Functions
+  * Lag & Lead
