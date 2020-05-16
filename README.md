@@ -36,3 +36,4 @@
   * Ranking Window Functions
   * Aggregate Window Functions
   * Lag & Lead
+* Chp 9: [Working with Sets](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp9.md)
