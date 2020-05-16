@@ -37,3 +37,12 @@
   * Aggregate Window Functions
   * Lag & Lead
 * Chp 9: [Working with Sets](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp9.md)
+  *
+* Chp 10: [Creating Tables & Constraints](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp10.md)
+  * 
+* Chp 11: [Inserting, Updating & Deleting Data](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp11.md)
+  *
+* Chp 12: [Views & Functions](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp12.md)
+  *
+* Chp 13: [Query Performance & Indexing](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp13.md)
+  *
