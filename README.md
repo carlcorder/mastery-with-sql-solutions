@@ -37,12 +37,27 @@
   * Aggregate Window Functions
   * Lag & Lead
 * Chp 9: [Working with Sets](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp9.md)
-  *
+  * Set Theory
+  * Union
+  * Intersect
+  * Except
 * Chp 10: [Creating Tables & Constraints](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp10.md)
-  * 
+  * Creating Tables
+  * Primary Keys
+  * Foreign Keys
+  * Check, Unique & Not Null Constraints
 * Chp 11: [Inserting, Updating & Deleting Data](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp11.md)
-  *
+  * Importing & Exporting Data
+  * Using Transactions & Inserting Data
+  * Updating Data
+  * Deleting Data
 * Chp 12: [Views & Functions](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp12.md)
-  *
+  * Views
+  * Materialized Views
+  * Writing Functions with SQL
+  * Writing Functions with PL/pgSQL
 * Chp 13: [Query Performance & Indexing](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp13.md)
-  *
+  * Query Plans with Explain
+  * Indexes
+  * Reading Complex Query Plans
+  * Query Optimization
