@@ -2,7 +2,7 @@
 
 # Solutions ✔️
 
-* Chp 3: [Query Fundamentals](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp3.md)
+* Chp 3: [Query Fundamentals](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp03.md)
   * Select From
   * Derived Columns
   * Filtering with Where
