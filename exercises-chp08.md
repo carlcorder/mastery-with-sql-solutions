@@ -55,16 +55,35 @@ where rn = 1
   and rating is not null;
 ```
 
-#### 
+#### 8.4 Write a query to show for each rental both the rental duration and also the average rental duration from the same customer
 
 ```sql
-
+select
+  customer_id,
+  rental_id,
+  return_date - rental_date as rent_duration,
+  avg(return_date - rental_date) over (partition by customer_id)
+from rental;
 ```
 
-#### 
+#### 8.5 Write a query to calculate a running total of payments received, grouped by month (ie. for each month show the total amount of money received that month and also the total amount of money received up to and including that month)
+
+We can re-use the monthly_amounts CTE we've encountered several times now to give us a baseline table to work with.Then by using the sum function over a window ordered by month ascending, we're able to take advantage of the default window frame and obtain a running total of payments received. 
 
 ```sql
-
+with monthly_amounts as
+(
+  select
+    date_trunc('month', payment_date) as month,
+    sum(amount) as amount
+  from payment
+  group by month
+)
+select
+  month,
+  amount,
+  sum(amount) over (order by month) as running_total
+from monthly_amounts;
 ```
 
 #### 
