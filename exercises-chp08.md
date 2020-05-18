@@ -139,20 +139,19 @@ from t
 where next - current > 1;
 ```
 
-#### 
+#### 8.8 Calculate for each customer the longest amount of time they've gone between renting a film
+
+The days_between CTE is used here to calculate for each rental the time difference between it and the next rental from the same customer. To obtain the longest break for each customer, the final query groups the results by customer and picks the largest such difference. 
 
 ```sql
-
-```
-
-#### 
-
-```sql
-
-```
-
-#### 
-
-```sql
-
+with days_between as
+(
+  select customer_id, rental_date,
+    lead(rental_date) over (partition by customer_id order by rental_date) - rental_date as diff
+  from rental
+)
+select customer_id, max(diff) as "longest break"
+from days_between
+group by customer_id
+order by customer_id;
 ```
