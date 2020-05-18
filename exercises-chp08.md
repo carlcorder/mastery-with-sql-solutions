@@ -86,10 +86,38 @@ select
 from monthly_amounts;
 ```
 
-#### 
+#### 8.6 Write a query to return the top 3 earning films in each rating category. Include ties. To calculate the earnings for a film, multiply the rental rate for the film by the number of times it was rented out
+
+We can build this query up in several steps. The first CTE calculates the amount of income received from each film by multiplying the rental rate by the number of times the film was rented out. The second CTE assigns a rank for each film based on the rating of the film and income - it also filters out those films without a rating. The final query filters the output to only return the films with a ranking less than or equal to 3. 
 
 ```sql
-
+with film_incomes as
+(
+  select
+    f.film_id,
+    f.title,
+    f.rating,
+    f.rental_rate * count(*) as income
+  from rental as r
+    inner join inventory as i using (inventory_id)
+    inner join film as f using (film_id)
+  group by f.film_id
+),
+film_rankings as
+(
+  select
+    film_id,
+    title,
+    rating,
+    income,
+    rank() over(partition by rating order by income desc)
+  from film_incomes
+  where rating is not null
+)
+select title, rating, income
+from film_rankings
+where rank <= 3
+order by rating, rank;
 ```
 
 #### 
