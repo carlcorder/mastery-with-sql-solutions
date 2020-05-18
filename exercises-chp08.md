@@ -120,10 +120,23 @@ where rank <= 3
 order by rating, rank;
 ```
 
-#### 
+#### 8.7 The rental table has 16,044 rows but the maximum rental ID is 16,049. This suggests that some rental IDs have been skipped over. Write a query to find the missing rental IDs (you [previously](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp07.md#715-the-rental-table-has-16044-rows-but-the-maximum-rental-id-is-16049-this-suggests-that-some-rental-ids-have-been-skipped-over-write-a-query-to-find-the-missing-rental-ids-the-generate_series-function-may-come-in-handy) did this using the generate_series function. Now do it using only window functions). Note you don't have to have your output formatted the same.
+
+This exercise falls under a general class of problems known as 'finding the gap' - a quite popular question in technical interviews! For each rental, you can use the lead() function to obtain the very next rental ID (when ordered by ID). Any missing IDs therefore are when this "gap" is greater than 1, with current + 1 identifying the first missing ID and next - 1 identifying the last missing ID in the "gap". 
 
 ```sql
-
+with t as
+(
+  select
+    rental_id as current,
+    lead(rental_id) over (order by rental_id) as next
+  from rental
+)
+select
+  current + 1 as missing_from,
+  next - 1 as missing_to
+from t
+where next - current > 1;
 ```
 
 #### 
