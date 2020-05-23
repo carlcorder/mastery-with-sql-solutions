@@ -75,10 +75,25 @@ except
 );
 ```
 
-#### 
+#### 9.5 Write a query to list all the customers who have rented out a film on a Saturday but never on a Sunday. Order the customers by first name.
+
+We first obtain a list of all the customers who have rented out a film on Saturday using the [date_part](https://www.postgresql.org/docs/current/functions-datetime.html) function with 'isodow' (ISO Day Of Week) which returns a number between 1 and 7 identifying the day of the week. From this, using EXCEPT, we remove the customers who have made rentals on Sunday. 
 
 ```sql
-
+(
+  select first_name, last_name
+  from rental
+    inner join customer using (customer_id)
+  where date_part('isodow', rental_date) = 6
+)
+except
+(
+  select first_name, last_name
+  from rental
+    inner join customer using (customer_id)
+  where date_part('isodow', rental_date) = 7
+)
+order by first_name;
 ```
 
 #### 
