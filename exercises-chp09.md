@@ -57,10 +57,22 @@ intersect
 );
 ```
 
-#### 
+#### 9.4 The missing rental IDs problem that we've encountered several times now is the perfect place to use EXCEPT. Write a query using the [generate_series](https://www.postgresql.org/docs/current/functions-srf.html) function and EXCEPT to find missing rental IDs (The rental table has 16,044 rows but the maximum rental ID is 16,049 - some IDs are missing)
+
+We first generate a sequential list of numbers ranging from the minimum rental ID (1) in the rental table to the maximum rental ID (16,049). From this, using EXCEPT, we remove the rental IDs present in the rental table. This leaves us with the missing rental IDs. Of all the different ways you've now learned to solve this exercise (first subqueries and then window functions) I think this is the most intuitive. 
 
 ```sql
-
+(
+  select t.id
+  from generate_series(
+    (select min(rental_id) from rental),
+    (select max(rental_id) from rental)) as t(id)
+)
+except
+(
+  select rental_id
+  from rental
+);
 ```
 
 #### 
