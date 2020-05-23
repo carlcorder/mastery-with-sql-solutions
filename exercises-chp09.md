@@ -96,20 +96,48 @@ except
 order by first_name;
 ```
 
-#### 
+#### 9.6 Write a query to list out all the distinct dates there was some sort of customer interaction (a rental or a payment) and order by output date. Include only one row in the output for each type of interaction
+
+Similar to the first exercise, we union the rental dates with the payment dates. This time however each query contains a static column describing the type of interaction (this pattern of adding a column to each query describing the source table is quite common when encountering set operators in real-world situations) 
 
 ```sql
-
+(
+  select cast(rental_date as date) as interaction_date, 'rental' as type
+  from rental
+)
+union
+(
+  select cast(payment_date as date) as interaction_date, 'payment' as type
+  from payment
+)
+order by interaction_date;
 ```
 
-#### 
+#### 9.7 Write a query to return the countries in which there are both customers and staff. Use a CTE to help simplify your code.
+
+Not such a tricky question in this case but it does involve the same joined table in more than one case so the use of a CTE can be quite handy here instead of having to repeat the same query elements to resolve an address ID in to a country. Yes, you can use CTEs with set operators without any problems!
 
 ```sql
-
+with address_country as
+(
+  select address_id, country
+  from address
+    inner join city using (city_id)
+    inner join country using (country_id)
+)
+(
+  select country
+  from staff
+    inner join address_country using (address_id)
+)
+intersect
+(
+  select country
+  from customer
+    inner join address_country using (address_id)
+);
 ```
 
-#### 
+#### 9.8 Imagine you had two queries - let's call them A and B. Can you figure out how you would use set operators to return the rows in either A or B, but not both.
 
-```sql
-
-```
+To obtain the rows in either A or B but not in both, you could first perform A union B. From this, you would then minus A intersect B. In full then: (A union B) except (A intersect B). Can you think of another way too?
