@@ -82,10 +82,18 @@ create table beach.rentals (
 );
 ```
 
-#### 
+#### 10.8 Add appropriate foreign keys to the rentals table. Setup the foreign keys such that if the referenced customer or equipment is deleted, the related entries in the rentals table will also be deleted. Note you may drop the schema/table and re-create it from scratch.
+
+Both the customer ID and equipment ID can be setup as foreign keys with ON DELETE CASCADE specified to ensure deletion of any referenced customers or equipment cascade delete records in the rentals table. 
 
 ```sql
-
+create table beach.rentals (
+  customer_id bigint references beach.customers (customer_id) on delete cascade,
+  equipment_id bigint references beach.equipment (equipment_id) on delete cascade,
+  rental_date date,
+  return_date date,
+  primary key (customer_id, equipment_id, rental_date)
+);
 ```
 
 #### 
