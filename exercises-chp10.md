@@ -126,26 +126,50 @@ create table beach.equipment (
 );
 ```
 
-#### 
+#### 10.11 Search the official PostgreSQL documentation for information about GENERATED { ALWAYS | BY DEFAULT } and explain in your own words the difference between the two options.
+
+With BY DEFAULT, PostgreSQL will generate a unique value for the column on insert, but will also allow you to insert your own value if you want to manually take control. With ALWAYS, if you attempt to provide your own value for the column as part of the insert statement, you'll get an error. 
+
+#### 10.12 Imagine you wanted to restrict the equipment types to just a couple of options like 'Surfboard', 'Single Kayak', 'Double Kayak', etc. To do this, you actually have more options at your disposal than you might think. You could add a check constraint to the column. You could create an ENUM. You could create a whole new data type called a DOMAIN. Or you could use a new table in your database to store the available types. Have a read of [this article](https://www.commandprompt.com/blog/fk_check_enum_or_domain_that_is_the_question/) and justify which approach you would take in this case.
+
+The approach I would take is to store the types in their own table with the type defined as the primary key. The main reason for preferring this approach is because it would be reasonable to expect new types of equipment to be added over time. When this happens, rather than having to alter constraints, drop the enum type and recreate, etc. and all the other complicated approaches, managing the types in their own table would be very easy with simple INSERT statements. We could also easily produce a list of all the different types available for rent, etc. 
 
 ```sql
-
+create table equipment_types (
+  type text primary key
+);
 ```
 
-#### 
+#### 10.13 A customer comes in and asks whether there are any Single Kayak's available for rent. Write a query to return a count of how many Single Kayak's are available for rent.
+
+In this case, the query is written to perform a count of items with the type 'Single Kayak', that are not missing, and also are not actively being rented (where an active rental is defined as a rental with a NULL return date). 
 
 ```sql
-
+select count(*)
+from beach.equipment
+where item_type = 'Single Kayak'
+  and missing = false
+  and equipment_id not in
+    (select equipment_id
+     from beach.rentals
+     where return_date is null);
 ```
 
-#### 
+#### 10.14 Right now a rental consists of a customer renting a single item. If it were more common though for a customer to rent multiple items at a time and you wanted to capture these all under a single 'rental', how would you modify the existing tables (or create new tables) to model this.
+
+One approach could be to split out the equipment being rented in to its own table. So as shown below, the rental_details table would capture details about the items, and could contain multiple entries for each rental ID. 
 
 ```sql
+create table beach.rentals (
+  rental_id bigserial primary key,
+  customer_id bigint references beach.customers (customer_id),
+  rental_date date,
+  return_date date
+);
 
-```
-
-#### 
-
-```sql
-
+create table beach.rental_details (
+  rental_id bigint references beach.rentals (rental_id),
+  equipment_id bigint references beach.equipment (equipment_id),
+  primary key (rental_id, equipment_id)
+);
 ```
