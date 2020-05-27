@@ -96,16 +96,34 @@ create table beach.rentals (
 );
 ```
 
-#### 
+#### 10.9 Add appropriate check, unique, not null, and default constraints to the customers table to capture the following requirements: a) A customer must provide both a first name and last name b) A customer must provide at least one contact detail - a phone number or email address c) The create date should be the date the new customer record is inserted in the table d) No two customers should have the same email address or phone number
+
+You shouldn't have too much problem picking constraints for the above requirements. Two interesting ones worth focusing on are the default create date - in this case, we use the function [current_date](https://www.postgresql.org/docs/current/functions-datetime.html#FUNCTIONS-DATETIME-CURRENT) (oddly enough, a function that you can call without parentheses) to return the current date. Also the check constraint, to make sure that either the email or phone number is not null. 
 
 ```sql
-
+create table beach.customers (
+  customer_id bigint generated always as identity primary key,
+  email text unique,
+  first_name text not null,
+  last_name text not null,
+  phone text unique,
+  create_date date not null default current_date,
+  check (email is not null or phone is not null)
+);
 ```
 
-#### 
+#### 10.10 Add appropriate check, unique, not null, and default constraints to the equipment table to capture the following requirements: a) A newly added item should not be missing! b) Each item must have a type c) The replacement cost can be NULL. But if provided, it must be a positive number
+
+You might be wondering about the check constraint for replacement_cost and why you didn't have to explicitly permit null. It's always important to keep in mind the '3 valued' logic employed by SQL where an expression can evaluate to true, false, or unknown. On inserting a replacement cost of NULL, the comparison "Is NULL >= 0" evaluates to unknown. Check constraints reject values that evaluate to false, but unknown is fair game. Which in this case, is exactly what we want.
 
 ```sql
-
+create table beach.equipment (
+  equipment_id bigserial primary key,
+  item_type text not null,
+  description text,
+  replacement_cost numeric(7, 2) check (replacement_cost >= 0),
+  missing boolean not null default false
+);
 ```
 
 #### 
