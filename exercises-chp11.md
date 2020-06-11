@@ -82,28 +82,45 @@ create table rental_stats as
   order by rental_day; 
 ```
 
-#### 
+#### 11.6 All customers should have an email address of the form [first_name].[last_name]@sakilacustomer.org (all in lower case). Write an update statement so that all customers have an email address in this format.
 
-
+In this case since we can visually observe that none of the customer email addresses are in the correct format, writing a blanket statement to update all the rows is fine. In general though, you are better off limiting your update statements to only update rows that you have to for performance reasons. 
 
 ```sql
-
+update customer
+set email = lower(first_name || '.' || last_name || '@sakilacustomer.org');
 ```
 
-#### 
+#### 11.7 Write an update statement to update the rental rate of the 20 most rented films by 10%
 
-
+For this update statement, we update the rental_rate for those films that exist in the results of a subquery. The subquery returns the 20 most rented films. 
 
 ```sql
-
+update film
+set rental_rate = rental_rate * 1.1
+where film_id in
+  (
+    select
+      i.film_id
+    from rental as r
+      inner join inventory as i using (inventory_id)
+    group by i.film_id
+    order by count(*) desc
+    limit 20
+  );
 ```
 
-#### 
+#### 11.8 Write a script to add a new column to the films table to hold the length of each film in hours (have a look at some of the examples for the [ALTER TABLE](https://www.postgresql.org/docs/current/sql-altertable.html) command) and then populate this new column with the correct values
 
-
+The script first creates the new column length_hrs of type numeric(2, 1) - allowing the storing of lengths like 1.2 hrs, 3.0 hrs, etc. Next the update statement populates the column with correct values, taking care to avoid integer division by dividing by 60.0.
 
 ```sql
+alter table film
+  add column length_hrs numeric(2, 1);
 
+update film
+set length_hrs = length / 60.0
+returning *;
 ```
 
 #### 
