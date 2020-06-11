@@ -123,20 +123,23 @@ set length_hrs = length / 60.0
 returning *;
 ```
 
-#### 
-
-
+#### 11.9 Delete all the payments where the payment amount was zero, returning the deleted rows
 
 ```sql
-
+delete from payment
+where amount = 0
+returning *;
 ```
 
-#### 
+#### 11.10 Delete all the unused languages from the language table
 
-
+This solution makes use of a plain uncorrelated subquery to return all the languages that are in use in the film table and deletes any languages from the language table not in this list. 
 
 ```sql
-
+delete from language
+where language_id not in
+  (select distinct language_id
+   from film);
 ```
 
 #### 
