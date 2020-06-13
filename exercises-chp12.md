@@ -127,12 +127,35 @@ as $$
 $$;
 ```
 
-#### 
+#### 12.9 Write a function using PL/pgSQL that decides whether a customer should get a discount when renting a film. Discounts are provided if a customer has no unreturned rentals (feel free to use the function you wrote in Exercise 12.6) and has also never rented the film before. The function should take a customer_id and film_id as arguments and return true if the customer should receive a discount, or false otherwise.
 
-
+This function has a couple of key parts. First, the previously written unreturned_rentals function is used and the result stored in num_outstanding. Secondly, a inline SQL query is used to count the number of times the customer has rented the film before and the result stored in num_rented. The final return expression returns the value of the boolean expression, which is true if the customer has no unreturned rentals and also has never rented the film before (both variables are 0), and false otherwise. 
 
 ```sql
+create or replace function apply_discount
+(
+  p_customer_id int,
+  p_film_id int
+)
+returns boolean
+language plpgsql
+as $$
+  declare
+    num_outstanding int;
+    num_rented int;
+  begin
+    num_outstanding := unreturned_rentals(p_customer_id);
 
+    select count(*) into num_rented
+    from rental as r
+      inner join inventory as i using (inventory_id)
+      inner join film as f using (film_id)
+    where customer_id = p_customer_id
+      and film_id = p_film_id;
+
+    return (num_outstanding = 0 and num_rented = 0);
+  end
+$$;
 ```
 
 #### 
