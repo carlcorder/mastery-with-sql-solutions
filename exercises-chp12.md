@@ -80,28 +80,51 @@ union all
 );
 ```
 
-#### 
+#### 12.6 Write a function using SQL that takes as an argument a customer_id and returns the number of unreturned rentals for that customer
 
-
+An unreturned rental is identified by having a return date of NULL so you must filter for that with your query. One thing which may catch you out when writing this function is to make sure the right types are being used. The count function in particular actually returns a bigint - so you can make the return type of your function bigint or cast to an int as I have (my reasoning for going with int is because the count will never be larger than int can store since the primary key of the rental table is also of type int) 
 
 ```sql
-
+create or replace function unreturned_rentals
+(
+  p_customer_id int
+)
+returns int
+language sql
+as $$
+  select cast(count(*) as int)
+  from rental
+  where customer_id = p_customer_id
+    and return_date is null;
+$$;
 ```
 
-#### 
+#### 12.7 Using the function you just created, write a query that outputs the number of unreturned rentals for each customer
 
-
+Notice how from a behaviour perspective this is similar to a correlated subquery! We effectively have some SQL code that is run for each customer in the customer table and returns a single value. 
 
 ```sql
-
+select
+  customer_id,
+  unreturned_rentals(customer_id)
+from customer;
 ```
 
-#### 
+#### 12.8 Write a function using SQL to generate a random int between HIGH and LOW inclusive (two input int arguments)
 
-
+There are a couple of different ways you can do this. Regardless of the approach you take, make sure to test your function by running it a number of times and observing the output. If you're uncomfortable with the math used in the solution grab a pen and paper and walk through a couple of simple examples on paper alone (eg. try rand(1, 4)). Note that the built-in random() function returns values between 0 (inclusive) and 1.0 (exclusive) which if you're not careful to account for, can cause your rand function to be off-by-one. 
 
 ```sql
-
+create or replace function rand
+(
+  p_low int,
+  p_high int
+)
+returns int
+language sql
+as $$
+  select floor(random() * (p_high - p_low + 1))::int + p_low;
+$$;
 ```
 
 #### 
