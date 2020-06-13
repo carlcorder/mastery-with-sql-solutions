@@ -1,7 +1,8 @@
 [![Mastery with SQL hero image](https://www.masterywithsql.com/images/mws-hero.svg)](https://www.masterywithsql.com/)
 
 # Solutions ✔️
-
+* Chp 1: Introduction to Databases and the Relational Model
+* Chp 2: Getting Setup
 * Chp 3: [Query Fundamentals](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp03.md)
   * Select From
   * Derived Columns
