@@ -158,10 +158,31 @@ as $$
 $$;
 ```
 
-#### 
+#### 12.10 For this exercise we're going to be writing a function using PL/pgSQL to implement the classic FizzBuzz problem. Write a function that returns in a table each number from 1 to n (where n is an argument you pass in to the function), and in the second column if the number is a multiple of 3, print "Fizz". If the number is a multiple of 5, print "Buzz". But if the number is a multiple of both 3 and 5, print "FizzBuzz". Otherwise, just print the number. You may want to use RETURN NEXT to build up your table one row at a time - read more about this in the [official documentation](https://www.postgresql.org/docs/current/plpgsql-control-structures.html).
 
-
+There's a variety of different ways you can go about solving this problem. For my solution, I loop from 1 to n using a for loop and build up the table of results one row at a time using RETURN NEXT (when used without any expression, the current values of the output variables - n and fb - are saved for return in a new row). The modulos operator is used to check for divisibility by 3 and 5. 
 
 ```sql
+create or replace function fizzbuzz (p_n int)
+returns table (n int, fb text)
+language plpgsql
+as $$
+  begin
+    for cntr in 1..p_n loop
+      n := cntr;
 
+      if (cntr % 3 = 0 and cntr % 5 = 0) then
+        fb := 'FizzBuzz';
+      elsif cntr % 3 = 0 then
+        fb := 'Fizz';
+      elsif cntr % 5 = 0 then
+        fb := 'Buzz';
+      else
+        fb := cntr;
+      end if;
+
+      return next;
+    end loop;
+  end
+$$;
 ```
