@@ -62,12 +62,22 @@ select
 from vw_monthly_totals;
 ```
 
-#### 
+#### 12.5 Continuing on from Exercise 1, you now have a view called vw_rental_film. You create a new materialized view called mvw_rental_film defined as below. Imagine a period of time has now passed and the materialized view's cache is out of date. Write a query which will output the difference between the original view and the materialized view (essentially this boils down to writing a query to show the difference between two sets of results). Within a test transaction block you can roll back, make some insertions and deletions to test your query works as expected.
 
-
+To find out the differences between two sets of results, you need to identify two things. First, you need to find the elements that are in the first set but not in the second. And you also need to find the elements that are in the second set, but not in the first. Combining those two lists of differences, you then have the complete list. You can achieve all these operations using the set operators EXCEPT and UNION ALL as below. 
 
 ```sql
-
+(
+  select * from vw_rental_film
+  except
+  select * from mvw_rental_film
+)
+union all
+(
+  select * from mvw_rental_film
+  except
+  select * from vw_rental_film
+);
 ```
 
 #### 
