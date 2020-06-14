@@ -57,7 +57,7 @@
   * Materialized Views
   * Writing Functions with SQL
   * Writing Functions with PL/pgSQL
-* Chp 13: [Query Performance & Indexing](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp13.md)
+* Chp 13: Query Performance & Indexing
   * Query Plans with Explain
   * Indexes
   * Reading Complex Query Plans
