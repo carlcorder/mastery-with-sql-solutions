@@ -1,3 +1,5 @@
+[neilwithdata](https://github.com/neilwithdata/mastery-with-sql)
+
 [![Mastery with SQL hero image](https://www.masterywithsql.com/images/mws-hero.svg)](https://www.masterywithsql.com/)
 
 # Solutions ✔️
