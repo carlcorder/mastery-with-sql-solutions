@@ -4,7 +4,7 @@
 
 # Solutions ✔️
 * Chp 1: Introduction to Databases and the Relational Model
-* Chp 2: Getting Setup
+* Chp 2: [Getting Setup](https://github.com/carlcorder/mastery-with-sql-solutions/tree/master/chp02)
 * Chp 3: [Query Fundamentals](https://github.com/carlcorder/mastery-with-sql-solutions/blob/master/exercises-chp03.md)
   * Select From
   * Derived Columns
